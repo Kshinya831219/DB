@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import oit.is74.db.model.Chamber;
 import oit.is74.db.model.ChamberMapper;
-//import oit.is74.db.model.ChamberUser;
-//import oit.is74.db.model.UserInfo;
+import oit.is74.db.model.ChamberUser;
+import oit.is74.db.model.UserInfo;
 
 @Controller
 @RequestMapping("/sample4")
@@ -33,6 +33,16 @@ public class Sample41Controller {
   @GetMapping("step3")
   public String sample43() {
     return "sample43.html";
+  }
+
+  @GetMapping("step4")
+  public String sample45() {
+    return "sample45.html";
+  }
+
+  @GetMapping("step6")
+  public String sample46() {
+    return "sample46.html";
   }
 
   @GetMapping("step2/{id}")
@@ -54,5 +64,39 @@ public class Sample41Controller {
     model.addAttribute("chamber3", chamber3);
     // System.out.println("ID:" + chamber3.getId());
     return "sample43.html";
+  }
+
+  @PostMapping("step5")
+  public String sample45(@RequestParam String chamberName, ModelMap model) {
+    ArrayList<Chamber> chambers5 = chamberMapper.selectAllByChamberName(chamberName);
+    model.addAttribute("chambers5", chambers5);
+    return "sample45.html";
+  }
+
+  @GetMapping("step7")
+  @Transactional
+  public String sample47(ModelMap model) {
+    ArrayList<ChamberUser> chamberUsers7 = chamberMapper.selectAllChamberUser();
+    model.addAttribute("chamberUsers7", chamberUsers7);
+    return "sample46.html";
+  }
+
+  @PostMapping("step8")
+  @Transactional
+  public String sample48(@RequestParam Double height, @RequestParam Integer age, ModelMap model, Principal prin) {
+    String loginUser = prin.getName(); // ログインユーザ情報
+    UserInfo ui = new UserInfo();
+    ui.setUserName(loginUser);
+    ui.setAge(age);
+    ui.setHeight(height);
+    try {
+      chamberMapper.insertUserInfo(ui);
+    } catch (RuntimeException e) {// 既に身長が登録されているユーザでさらに登録しようとすると実行時例外が発生するので，コンソールに出力してinsertをSkipする
+      System.out.println("Exception:" + e.getMessage());
+    }
+    // insert後にすべての身長が登録されているユーザを取得する
+    ArrayList<ChamberUser> chamberUsers7 = chamberMapper.selectAllChamberUser();
+    model.addAttribute("chamberUsers7", chamberUsers7);
+    return "sample46.html";
   }
 }
