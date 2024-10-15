@@ -13,20 +13,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/*import oit.is.inudaisuki.springboot_samples.model.Chamber;
-import oit.is.inudaisuki.springboot_samples.model.ChamberMapper;
-import oit.is.inudaisuki.springboot_samples.model.ChamberUser;
-import oit.is.inudaisuki.springboot_samples.model.UserInfo;
-*/
+import oit.is74.db.model.Chamber;
+import oit.is74.db.model.ChamberMapper;
+//import oit.is74.db.model.ChamberUser;
+//import oit.is74.db.model.UserInfo;
+
 @Controller
 @RequestMapping("/sample4")
 public class Sample41Controller {
 
-  // @Autowired
-  // ChamberMapper chamberMapper;
+  @Autowired
+  ChamberMapper chamberMapper;
 
   @GetMapping("step1")
   public String sample41() {
+    return "sample41.html";
+  }
+
+  @GetMapping("step2/{id}")
+  public String sample42(@PathVariable Integer id, ModelMap model) {
+    Chamber chamber2 = chamberMapper.selectById(id);
+    model.addAttribute("chamber2", chamber2);
+
     return "sample41.html";
   }
 }
